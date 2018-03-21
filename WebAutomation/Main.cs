@@ -90,7 +90,7 @@ namespace WebAutomation
 
             var path = Application.StartupPath + "\\Firefox";
             Xpcom.Initialize(path);
-            
+
             FormLoad();
 
             LoadScript(args);
@@ -123,7 +123,7 @@ namespace WebAutomation
                     break;
                 default:
                     break;
-            }            
+            }
         }
 
         #endregion
@@ -200,7 +200,7 @@ namespace WebAutomation
         {
             ShowImageClick();
         }
-        
+
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
             AboutClick();
@@ -209,7 +209,7 @@ namespace WebAutomation
         private void checkForUpdateToolStripMenuItem_Click(object sender, EventArgs e)
         {
             CheckUpdateClick();
-        }       
+        }
 
 
         private void notifyIconAutomation_Click(object sender, EventArgs e)
@@ -676,7 +676,7 @@ namespace WebAutomation
         public void ShowImageClick()
         {
             if (cfgShowImages.Checked == false)
-            {   
+            {
                 cfgShowImages.Checked = true;
             }
             else
@@ -688,12 +688,12 @@ namespace WebAutomation
 
         public void AboutClick()
         {
-            
+
         }
 
         public void CheckUpdateClick()
         {
-            
+
         }
 
         public void ShowWindow()
@@ -717,7 +717,7 @@ namespace WebAutomation
             }
         }
 
-        
+
         #endregion
 
         #region Toolbar Event Functions
@@ -975,7 +975,7 @@ namespace WebAutomation
                         wb.DomContextMenu -= wbBrowser_DomContextMenu;
                         wb.Dispose();
                         wb = null;
-                        
+
                         GC.Collect();
                         GC.WaitForPendingFinalizers();
                         if (_memoryService == null)
@@ -983,7 +983,7 @@ namespace WebAutomation
                             _memoryService = Xpcom.GetService<nsIMemory>("@mozilla.org/xpcom/memory-service;1");
                         }
                         _memoryService.HeapMinimize(false);
-                    }                    
+                    }
                     currentTab.Controls.Clear();
                 }
                 GoWebBrowser(url);
@@ -1227,7 +1227,7 @@ namespace WebAutomation
             this.ShowInTaskbar = false;
             this.Visible = false;
         }
-        
+
         #endregion
 
         #region ISingleInstanceEnforcer Members
@@ -1353,7 +1353,7 @@ namespace WebAutomation
                                         elem.InnerHtml = value;
                                         elem.Focus();
                                     }
-                                }                                
+                                }
                                 break;
                             }
                         }
@@ -1415,7 +1415,7 @@ namespace WebAutomation
                     }*/
                 }
             }
-            
+
         }
 
         public void filldropdown(string xpath, string value)
@@ -1488,6 +1488,21 @@ namespace WebAutomation
             }
         }
 
+        public JsVal jscript(string script)
+        {
+            GeckoWebBrowser wb = (GeckoWebBrowser)GetCurrentWB();
+
+            JsVal result;
+            using (AutoJSContext context = new AutoJSContext(wb.Window))
+            {
+                result = context.EvaluateScript(script);
+            }
+
+            return result;
+        }
+
+
+
         public void sleep(int seconds, bool isBreakWhenWBCompleted)
         {
             IsBreakSleep = false;
@@ -1499,6 +1514,7 @@ namespace WebAutomation
                     System.Threading.Thread.Sleep(100);
 
                     toolStripStatus.Text = "Sleep: " + ((i + 1) * 100) + "/" + (seconds * 1000);
+
                     if (isBreakWhenWBCompleted && IsBreakSleep)
                     {
                         break;
@@ -1603,7 +1619,7 @@ namespace WebAutomation
                 }
                 catch (Exception ex)
                 {
-                    
+
                 }
             }
         }
@@ -1999,14 +2015,14 @@ namespace WebAutomation
 
         public void scrollto(int value)
         {
-            
+
         }
 
         public int getheight()
         {
             int result = 0;
 
-            
+
 
             return result;
         }
@@ -2027,7 +2043,7 @@ namespace WebAutomation
         public bool checkelement(string xpath) {
             bool result = false;
 
-            
+
 
             return result;
         }
@@ -2041,7 +2057,7 @@ namespace WebAutomation
             {
                 result = wb.Document.Body.InnerHtml;
             }
-           
+
             return result;
         }
 
@@ -2133,7 +2149,7 @@ namespace WebAutomation
 
         public void CaptchaBorder(string xpath, string style)
         {
-            
+
         }
 
         [ComImport, InterfaceType((short)1), Guid("3050F669-98B5-11CF-BB82-00AA00BDCE0B")]
@@ -2440,7 +2456,7 @@ namespace WebAutomation
         public string RemoveStopWords(string text)
         {
             string result = string.Empty;
-            
+
             if (!string.IsNullOrEmpty(text))
             {
                 text = text.Replace("\n", "");
@@ -2479,7 +2495,7 @@ namespace WebAutomation
             bool result = false;
 
             XDocument xdoc = XDocument.Load(path);
-            
+
             var rs = (from w in xdoc.Descendants(node) where w.Value == text select w).FirstOrDefault();
             if (rs != null) result = true;
 
@@ -3404,6 +3420,7 @@ namespace WebAutomation
 
                                                 function sendKeys(key) { CheckAbort(); window.external.sendKeys(key); }
 
+                                                function jscript(script) {window.external.jscript(script);}
                                             </script>
                                         </head>
                                         <body>
@@ -3485,7 +3502,7 @@ namespace WebAutomation
         void wbBrowser_DocumentCompleted(object sender, Gecko.Events.GeckoDocumentCompletedEventArgs e)
         {
             if (e.Uri.AbsolutePath != (sender as GeckoWebBrowser).Url.AbsolutePath)
-                return; 
+                return;
 
             GeckoWebBrowser wbBrowser = (GeckoWebBrowser)sender;
 
@@ -3825,7 +3842,7 @@ namespace WebAutomation
             return result;
         }
 
-        #endregion  
+        #endregion
 
         #region Excel
 
@@ -3899,7 +3916,7 @@ namespace WebAutomation
                 if (workbook != null)
                 {
                     var sheet = workbook.GetSheet(sheetname);
-                    NPOI.SS.Util.CellReference celRef = new NPOI.SS.Util.CellReference(cellName); 
+                    NPOI.SS.Util.CellReference celRef = new NPOI.SS.Util.CellReference(cellName);
                     var row = sheet.GetRow(celRef.Row);
                     if (row == null)
                         row = sheet.CreateRow(celRef.Row);
@@ -3985,7 +4002,7 @@ namespace WebAutomation
             sddLanguage.Text = Language.Resource.English;
 
             btnRegconization.Text = Language.Resource.StartRegconization;
-            
+
             tabDownload.Text = Language.Resource.Download;
             toolNewDownload.Text = Language.Resource.NewDownload;
             toolStart.Text = Language.Resource.Start;
