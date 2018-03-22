@@ -1488,7 +1488,7 @@ namespace WebAutomation
             }
         }
 
-        public JsVal jscript(string script)
+        public string jscript(string script)
         {
             GeckoWebBrowser wb = (GeckoWebBrowser)GetCurrentWB();
 
@@ -1498,7 +1498,7 @@ namespace WebAutomation
                 result = context.EvaluateScript(script);
             }
 
-            return result;
+            return result.ToString();
         }
 
 
@@ -3420,7 +3420,7 @@ namespace WebAutomation
 
                                                 function sendKeys(key) { CheckAbort(); window.external.sendKeys(key); }
 
-                                                function jscript(script) {window.external.jscript(script);}
+                                                function jscript(script) {CheckAbort(); return window.external.jscript(script);}
                                             </script>
                                         </head>
                                         <body>
